@@ -8,7 +8,7 @@ Buggy Blender Importer for GTA IV .oad/.onim files
 Instructions:
 
 1. Install and enable addon.
-2. Select armature in Object Mode
+2. Select armature in Object Mode.
 3. File > Import > GTA IV Anim.
 4. Select .oad or .onim file.
 5. Look for imported animations in the NLA editor. Star a track to see it play.
