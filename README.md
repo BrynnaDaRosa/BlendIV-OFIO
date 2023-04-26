@@ -1,5 +1,5 @@
 # GTAIV-Anim-Importer
-A WIP Grand Theft Auto IV OpenFormats Animation importer addon for Blender, originally written by scurest and uploaded here wit permission, tested with Blender 2.9.
+A WIP Grand Theft Auto IV OpenFormats Animation importer addon for Blender, originally written by scurest and uploaded here with permission, tested with Blender 2.9.
 
 scurest's readme modified below:
 
