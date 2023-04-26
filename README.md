@@ -13,3 +13,5 @@ Instructions:
 4. Select .oad or .onim file.
 5. Look for imported animations in the NLA editor. Star a track to see it play.
 
+Current issues involving "floaty" animations may or may not have something to do with the nature of IK in the GTA IV animations.
+An issue with "foretwist" bones being unanimated are expected as there may be certain flags in the animation that would normally move the foretwist with the forearm bones as if it were their parent in-game. 
