@@ -1,6 +1,8 @@
 # GTAIV-Anim-Importer
 A WIP Grand Theft Auto IV OpenFormats Animation importer addon for Blender, originally written by scurest and uploaded here with permission, tested with Blender 2.9.
 
+![alt text](https://images-ext-1.discordapp.net/external/6oB0et_HVv3C9OdhfqwmeANJ0hineDFabCMfJp8qNPU/https/repository-images.githubusercontent.com/632805563/e891452a-bef3-41c8-ad82-c49d212d10e9?width=932&height=417)
+
 scurest's readme modified below:
 
 Buggy Blender Importer for GTA IV .oad/.onim files
