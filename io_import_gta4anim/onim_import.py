@@ -26,11 +26,22 @@ def stash_action(ob, action):
 
     nla = ob.animation_data.nla_tracks
 
-    track = nla.new()
-    track.name = action.name
-    track.strips.new(action.name, 0, action)
+    # Check if track for the action already exists
+    for track in nla:
+        if track.name == action.name:
+            track.strips[0].action = action  # Update the action
+            break
+    else:
+        # If not, create a new track and add the action
+        track = nla.new()
+        track.name = action.name
+        track.strips.new(action.name, 0, action)
+
     track.lock = True
     track.mute = True
+
+    # Set the action as the active action
+    ob.animation_data.action = action
 
 
 def gather_bind_pose(arma):
@@ -60,7 +71,9 @@ class OnimImport:
         self.dt = 0
 
     def run(self):
+        print("[DEBUG] Running OnimImport... V1")
         self.calculate_dt()
+        print(f"[DEBUG] Calculated dt: {self.dt}")
         self.process_animation()
         return self.action
 
@@ -68,6 +81,7 @@ class OnimImport:
         onim = self.onim
         frames = get_key(onim, "Frames")
         duration = get_key(onim, "Duration")
+        print(f"[DEBUG] Frames: {frames}, Duration: {duration}")
 
         # Convert duration from seconds to Blender-frames
         # using scene's current FPS
@@ -78,11 +92,13 @@ class OnimImport:
         self.dt = bf_duration / frames
 
     def process_animation(self):
+        print("[DEBUG] Processing Animation...")
         onim = self.onim
         anim = get_after_key(onim, "Animation")
         i = 0
         while i < len(anim):
             line = anim[i]
+            print(f"[DEBUG] Processing line: {line[0]}")
             if line[0] in ["BonePosition", "BoneRotation"]:
                 self.process_bone_anim(anim[i], anim[i + 1])
                 i += 1
@@ -150,6 +166,7 @@ class OnimImport:
             assert False, "unknown FramesData format"
 
     def process_bone_anim(self, target_line, data_block):
+        print(f"[DEBUG] Processing Bone Animation for {target_line}")
         anim_type, _, bone_id = target_line
         values = self.read_framesdata(data_block[0], data_block[1])
         bone_name = BoneNameMap[bone_id]
@@ -224,13 +241,11 @@ class OnimImport:
         ]
 
     def add_fcurves(self, data_path, values, group_name):
-        # Temp array for keyframes: [time, value, time, value, ...]
-        # We reuse it since the times are the same for every fcurve
+        print(f"[DEBUG] Adding fcurves to {data_path} with {len(values)} values.")
         pts = [0] * (2 * len(values))
         keyframe_times = (i * self.dt for i in range(len(values)))
         pts[0::2] = keyframe_times
 
-        # For each component (eg. XYZ)
         n = len(values[0])
         for index in range(n):
             fcurve = self.action.fcurves.new(
@@ -239,7 +254,7 @@ class OnimImport:
                 action_group=group_name,
             )
 
-            # Add keyframes
             pts[1::2] = (v[index] for v in values)
             fcurve.keyframe_points.add(len(values))
             fcurve.keyframe_points.foreach_set("co", pts)
+            fcurve.update()  # Update the F-Curve after adding keyframes
